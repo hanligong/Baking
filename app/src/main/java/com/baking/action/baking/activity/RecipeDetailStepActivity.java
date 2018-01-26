@@ -15,7 +15,11 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.baking.action.baking.R;
+import com.baking.action.baking.model.HttpObject;
 import com.baking.action.baking.model.StepModel;
+import com.baking.action.baking.uitls.DataUtils;
+import com.baking.action.baking.uitls.SharePreferenceUtils;
+import com.bluelinelabs.logansquare.LoganSquare;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -34,6 +38,7 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
@@ -73,6 +78,26 @@ public class RecipeDetailStepActivity extends BaseActivity {
         Bundle bundle = getIntent().getExtras();
         if (null != bundle) {
             stepModels = bundle.getParcelableArrayList("videos");
+        }
+
+        if (stepModels == null || stepModels.isEmpty()) {
+            int bakId = SharePreferenceUtils.getIntSharePreference(this);
+
+            String data = DataUtils.getData(this);
+            if (TextUtils.isEmpty(data)) {
+                return;
+            }
+            HttpObject httpObject = null;
+            try {
+                httpObject = LoganSquare.parse(DataUtils.getData(this), HttpObject.class);
+                if (bakId == -1) {
+                    return;
+                }
+                stepModels = httpObject.getList().get(bakId).getSteps();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
         }
 
         mVideosLv.setAdapter(new RecipeDetailStepAdapter());
@@ -155,12 +180,7 @@ public class RecipeDetailStepActivity extends BaseActivity {
             viewHolder.mShortDescTv.setText(stepModels.get(position).getShortDescription());
             viewHolder.mDescTv.setText(stepModels.get(position).getDescription());
 
-            if (TextUtils.isEmpty(stepModels.get(position).getVideoURL())) {
-                viewHolder.mStepRl.setVisibility(View.GONE);
-            } else {
-                viewHolder.mStepRl.setVisibility(View.VISIBLE);
-
-                 }
+            isVideoShow(viewHolder.mStepRl, stepModels.get(position).getVideoURL());
 
             final ViewHolder finalViewHolder = viewHolder;
             viewHolder.mStepRl.setOnClickListener(new View.OnClickListener() {
@@ -187,6 +207,15 @@ public class RecipeDetailStepActivity extends BaseActivity {
 
             public ViewHolder(View itemView) {
                 ButterKnife.bind(this, itemView);
+            }
+        }
+
+        public void isVideoShow(RelativeLayout mStepRl, String videoUrl){
+            if (TextUtils.isEmpty(videoUrl)) {
+                mStepRl.setVisibility(View.GONE);
+            } else {
+                mStepRl.setVisibility(View.VISIBLE);
+
             }
         }
     }

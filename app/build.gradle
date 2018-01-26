@@ -47,4 +47,16 @@ dependencies {
     compile 'com.google.android.exoplayer:exoplayer-core:2.6.1'
     compile 'com.google.android.exoplayer:exoplayer-dash:2.6.1'
     compile 'com.google.android.exoplayer:exoplayer-ui:2.6.1'
+
+    testCompile 'junit:junit:4.12'
+
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+
+    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.0') {
+        exclude group: 'com.android.support', module: 'appcompat'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude module: 'recyclerview-v7'
+    }
 }

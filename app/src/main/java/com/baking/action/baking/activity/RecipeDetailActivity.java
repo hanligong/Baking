@@ -117,7 +117,9 @@ public class RecipeDetailActivity extends BaseActivity {
                 this.finish(); // back button
                 return true;
             case R.id.menu_star:
-                SharePreferenceUtils.saveIntSharePreference(this, (Integer) getIntent().getExtras().get("position"));
+                if (null != getIntent().getExtras()) {
+                    SharePreferenceUtils.saveIntSharePreference(this, (Integer) getIntent().getExtras().get("position"));
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
