@@ -19,8 +19,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:launchMode="singleTask"
-            android:name=".activity.RecipeDetailActivity" />
+            android:name=".activity.RecipeDetailActivity"
+            android:launchMode="singleTask" />
         <activity android:name=".activity.RecipeDetailStepActivity" />
 
         <receiver android:name=".AppWidget.BakingAppWidget">
@@ -34,6 +34,8 @@
         </receiver>
 
         <service android:name=".service.BakingService" />
+        <service
+            android:name=".service.RemoveViewService" android:permission="android.permission.BIND_REMOTEVIEWS"></service>
     </application>
 
 </manifest>

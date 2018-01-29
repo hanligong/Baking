@@ -10,7 +10,7 @@ import android.content.SharedPreferences;
 
 public class SharePreferenceUtils {
 
-    public static void saveIntSharePreference(Activity activity, int position){
+    public static void saveIntSharePreference(Context activity, int position){
         SharedPreferences sp = activity.getSharedPreferences("bak", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt("bakStar", position);

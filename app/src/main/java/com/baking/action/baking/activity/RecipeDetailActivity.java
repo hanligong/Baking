@@ -70,7 +70,7 @@ public class RecipeDetailActivity extends BaseActivity {
         }
 
         if (null == ingredientLists || ingredientLists.isEmpty()) {
-            int bakId = SharePreferenceUtils.getIntSharePreference(this);
+            int bakId = getIntent().getIntExtra("position", -1);
 
             String data = DataUtils.getData(this);
             if (TextUtils.isEmpty(data)) {
